@@ -113,3 +113,40 @@ struct List
   
 };
 
+int main()
+{
+  List<int> lst;
+
+  std::cout << lst.empty() << "\n";
+
+  lst.add(10);
+  lst.add(20);
+  lst.add(30);
+  lst.add(40);
+
+  std::cout << lst.size() << "\n";
+
+  std::cout << lst.begin() << "\n";
+  std::cout << lst.end() << "\n";
+
+  lst.pop_first();
+  std::cout << "Размер: " << lst.size() << "\n";
+  std::cout << "Первый: " << lst.begin() << "\n";
+
+  lst.pop_last();
+  std::cout << "Размер: " << lst.size() << "\n";
+  std::cout << "Последний: " << lst.end() << "\n";
+
+  int* arr = lst.convert();
+  size_t s = lst.size();
+
+  for (size_t i = 0; i < s; i++)
+    std::cout << arr[i] << " ";
+  std::cout << "\n";
+
+  delete[] arr;
+
+  lst.clear();
+  std::cout << lst.empty() << "\n";
+  return 0;
+}
