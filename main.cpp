@@ -1,19 +1,26 @@
+#include <cstddef>
+#include <iostream>
+
 template< class T >
 struct BiList
 {
-    T val;
-    BiList< T >* next;
-    BiList< T >* prev;
+  T val;
+  BiList< T >* next;
+  BiList< T >* prev;
 };
 
 template< class T >
 struct List
 {
-  List();
+  List():
+    head(nullptr),
+    tail(nullptr)
+  {}
+
   void add(const T& v)
   {
-    BiList< T >* newNode = new BiList({v, nullptr, nullptr});
-    if(emppty())
+    BiList< T >* newNode = new BiList< T >{v, nullptr, nullptr};
+    if(empty())
     {
       head = tail = newNode;
     }
@@ -27,41 +34,82 @@ struct List
 
   void pop_last()
   {
-    List< T >* n = tail->prev;
+    BiList<T>* n = tail->prev;
     delete tail;
-    tail = prev;
+    tail = n;
+    if (tail)
+      tail->next = nullptr;
+    else
+      head = nullptr;
   }
 
   void pop_first()
   {
-    BiList< T >* n = head->next;
+    BiList<T>* n = head->next;
     delete head;
     head = n;
+    if (head)
+      head->prev = nullptr;
+    else
+      tail = nullptr;
   }
 
-  bool emppty()
+  bool empty() const
   {
     return head == nullptr;
   }
 
-  void clear(List< T > h)
+  void clear()
   {
-    while (!emppty())
+    while (!empty())
     {
       pop_first();
     }
   }
-  T& begin()
+
+  T& begin() const
   {
     return head->val;
   }
-  T& end()
+
+  T& end() const
   {
     return tail->val;
   }
 
+  size_t size() const
+  {
+    BiList< T >* h = head;
+    size_t count = 0;
+    while (h)
+    {
+      count++;
+      h = h->next;
+    }
+    return count;
+  }
+
+  T* convert() const
+  {
+    size_t s = size();
+    T* res = new T[s];
+    BiList< T >* h = head;
+    for(size_t i = 0; i < s; i++)
+    {
+      res[i] = h->val;
+      h = h->next;
+    }
+    return res;
+  }
+
+  ~List()
+    {
+      clear();
+    }
+
   private:
   BiList< T >* head;
   BiList< T >* tail;
+  
 };
 
