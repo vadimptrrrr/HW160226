@@ -93,11 +93,19 @@ struct List
   {
     size_t s = size();
     T* res = new T[s];
-    BiList< T >* h = head;
-    for(size_t i = 0; i < s; i++)
+    try
     {
-      res[i] = h->val;
-      h = h->next;
+      BiList< T >* h = head;
+      for(size_t i = 0; i < s; i++)
+      {
+        res[i] = h->val;
+        h = h->next;
+      }
+    }
+    catch(...)
+    {
+      delete[] res;
+      throw;
     }
     return res;
   }
@@ -150,3 +158,5 @@ int main()
   std::cout << lst.empty() << "\n";
   return 0;
 }
+
+/// Неявный интерфейс T: оператор присваивания и конструктор копирования.
